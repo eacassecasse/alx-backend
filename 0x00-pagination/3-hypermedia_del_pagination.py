@@ -44,15 +44,35 @@ class Server:
         Return indexed data and hypermedias from a specific range computed
         using the current index and the page size attributes.
         """
-        result = {
-            "index": 0,
-            "next_index": 0,
-            "page_size": 0,
-            "data": []
-        }
-
+        
         dataset = self.indexed_dataset()
+        keys = list(dataset.keys())
+        total_items = len(dataset)
+        start_index = index
 
-        result["data"] = dataset
+        if not index or index not in keys:
+            start_index = next((k for k in keys
+                if k >= (index or 0)), keys[0] if keys else 0)
 
-        return result
+        if index:
+            assert 0 <= index <= total_items
+
+        cur_index = keys.index(start_index)
+        count = 0
+        data = []
+
+        while count < page_size and cur_index < len(keys):
+            key = keys[cur_index]
+            if key in dataset:
+                data.append(dataset[key])
+                count += 1
+            cur_index += 1
+
+        next_index = keys[cur_index] if cur_index < len(keys) else None
+            
+        return {
+                "index": index,
+                "next_index": next_index,
+                "page_size": len(data),
+                "data": data
+                }
