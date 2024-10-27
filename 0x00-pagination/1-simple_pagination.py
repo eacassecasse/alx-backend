@@ -35,7 +35,7 @@ class Server:
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
         """
-        Return data from a specific range computed using the 
+        Return data from a specific range computed using the
         current page and the page size attributes.
         """
         assert isinstance(page, int) and page > 0
