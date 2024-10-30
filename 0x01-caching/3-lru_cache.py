@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ This module defines a LRUCache model. """
 
+from collections import OrderedDict
 from base_caching import BaseCaching
 
 
@@ -9,6 +10,7 @@ class LRUCache(BaseCaching):
     
     def __init__(self):
         super().__init__()
+        self.cache_data = OrderedDict()
 
 
     def put(self, key, item):
@@ -16,18 +18,10 @@ class LRUCache(BaseCaching):
         if key and item:
             self.cache_data[key] = item
 
-            if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-                rank = 0
-                keys = list(self.cache_data)
-                ranks = {}
-
-                for key in keys:
-                    ranks[key] = rank
-                    rank += 1
-
-                discarded = keys[ranks[min(ranks, key=ranks.get)]]
-                print(f"DISCARD: {discarded}")
-                del self.cache_data[discarded]
+            if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
+                discarded, _ = self.cache_data.popitem(last=False)
+                print("DISCARD:", discarded)
+            self.cache_data.move_to_end(key)
 
     def get(self, key):
         """ Retrieves a cached item. """
