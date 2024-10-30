@@ -18,10 +18,10 @@ class MRUCache(BaseCaching):
             return
 
         self.cache_data[key] = item
-        self.cache_data.move_to_end(key)
+        self.cache_data.move_to_end(key, last=False)
 
         if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-            discarded, _ = self.cache_data.popitem(last=True)
+            discarded, _ = self.cache_data.popitem(last=False)
             print(f"DISCARD: {discarded}")
 
     def get(self, key):
