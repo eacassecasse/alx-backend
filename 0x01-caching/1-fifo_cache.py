@@ -6,10 +6,9 @@ from base_caching import BaseCaching
 
 class FIFOCache(BaseCaching):
     """ Defines a FIFO Caching System. """
-    
+
     def __init__(self):
         super().__init__()
-
 
     def put(self, key, item):
         """ Assigns a value to a cache item using FIFO. """
@@ -20,8 +19,6 @@ class FIFOCache(BaseCaching):
                 discarded = list(self.cache_data)[0]
                 print(f"DISCARD: {discarded}")
                 del self.cache_data[discarded]
-            
-
 
     def get(self, key):
         """ Retrieves a cached item. """

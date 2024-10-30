@@ -6,10 +6,9 @@ from base_caching import BaseCaching
 
 class LIFOCache(BaseCaching):
     """ Defines a LIFO Caching System. """
-    
+
     def __init__(self):
         super().__init__()
-
 
     def put(self, key, item):
         """ Assigns a value to a cache item using LIFO. """
@@ -21,8 +20,6 @@ class LIFOCache(BaseCaching):
                 discarded = keys[len(keys) - 2]
                 print(f"DISCARD: {discarded}")
                 del self.cache_data[discarded]
-            
-
 
     def get(self, key):
         """ Retrieves a cached item. """
