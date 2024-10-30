@@ -1,35 +1,28 @@
 #!/usr/bin/env python3
 """ This module defines a MRUCache model. """
 
+from collections import OrderedDict
 from base_caching import BaseCaching
 
 
 class MRUCache(BaseCaching):
     """ Defines a MRU Caching System. """
-    
+
     def __init__(self):
         super().__init__()
-
+        self.cache_data = OrderedDict()
 
     def put(self, key, item):
         """ Assigns a value to a cache item using MRU. """
-        if key and item:
-            self.cache_data[key] = item
+        if key is None or item is None:
+            return
 
-            if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-                rank = 0
-                keys = list(self.cache_data)
-                ranks = {}
+        self.cache_data[key] = item
+        self.cache_data.move_to_end(key)
 
-                for key in keys:
-                    ranks[key] = rank
-                    rank -= 1
-
-                discarded = keys[ranks[min(ranks, key=ranks.get)]]
-                print(f"DISCARD: {discarded}")
-                del self.cache_data[discarded]
-            
-
+        if len(self.cache_data) > BaseCaching.MAX_ITEMS:
+            discarded, _ = self.cache_data.popitem(last=True)
+            print(f"DISCARD: {discarded}")
 
     def get(self, key):
         """ Retrieves a cached item. """
