@@ -7,10 +7,11 @@ from base_caching import BaseCaching
 
 class MRUCache(BaseCaching):
     """ Defines a MRU Caching System. """
-
+    
     def __init__(self):
         super().__init__()
         self.cache_data = OrderedDict()
+
 
     def put(self, key, item):
         """ Assigns a value to a cache item using MRU. """
@@ -21,8 +22,10 @@ class MRUCache(BaseCaching):
         self.cache_data.move_to_end(key)
 
         if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-            discarded, _ = self.cache_data.popitem(last=True)
+            discarded, _ = self.cache_data.popitem(last=False)
             print(f"DISCARD: {discarded}")
+            
+
 
     def get(self, key):
         """ Retrieves a cached item. """
