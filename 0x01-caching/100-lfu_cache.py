@@ -31,7 +31,7 @@ class LFUCache(BaseCaching):
             return
 
         self.cache_data[key] = item
-        self.usage_frequency[key] = 1
+        self.usage_frequency[key] = self.usage_frequency.get(key, 0) + 1
         self.cache_data.move_to_end(key)
 
         if len(self.cache_data) > BaseCaching.MAX_ITEMS:
@@ -39,11 +39,16 @@ class LFUCache(BaseCaching):
                 k for k, v in self.usage_frequency.items()
                 if v == min(self.usage_frequency.values())
                 ]
-            if len(least_frequent) <= 1:
-                discarded, _ = self.cache_data.pop(least_frequent[0])
+            if len(least_frequent) > 1:
+                for k in self.cache_data:
+                    if k in least_frequent:
+                        discarded = k
+                        break
             else:
-                discarded, _ = self.cache_data.popitem(last=False)
+                discarded = least_frequent[0]
             print(f"DISCARD: {discarded}")
+            del self.cache_data[discarded]
+            del self.usage_frequency[discarded]
 
     @call_count
     def get(self, key):
