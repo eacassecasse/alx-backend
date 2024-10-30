@@ -16,19 +16,18 @@ class LRUCache(BaseCaching):
         if key and item:
             self.cache_data[key] = item
 
-            if key not in self.cache_data:
-                if len(self.cache_data) + 1 > BaseCaching.MAX_ITEMS:
-                    rank = 0
-                    keys = list(self.cache_data)
-                    ranks = {}
-                    
-                    for key in keys:
-                        ranks[key] = rank
-                        rank += 1
-                        
-                    discarded = keys[ranks[min(ranks, key=ranks.get)]]
-                    print(f"DISCARD: {discarded}")
-                    del self.cache_data[discarded]
+            if len(self.cache_data) + 1 > BaseCaching.MAX_ITEMS:
+                rank = 0
+                keys = list(self.cache_data)
+                ranks = {}
+
+                for key in keys:
+                    ranks[key] = rank
+                    rank += 1
+
+                discarded = keys[ranks[min(ranks, key=ranks.get)]]
+                print(f"DISCARD: {discarded}")
+                del self.cache_data[discarded]
             
 
 
